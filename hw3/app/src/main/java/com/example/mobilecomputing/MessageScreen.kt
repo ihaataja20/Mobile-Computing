@@ -54,9 +54,8 @@ data class Message(val author: String, val body: String)
 
 @Composable
 fun MessageCard(msg: Message,
-                navController: NavHostController,
-                username: String?
-                ) {
+                navController: NavHostController
+) {
     //Padding around message
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Image(
@@ -83,7 +82,7 @@ fun MessageCard(msg: Message,
         //toggle isExpanded when click this column
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
-                text = username ?: msg.author,
+                text = msg.author,
                 color = MaterialTheme.colorScheme.secondary,
                 style = MaterialTheme.typography.titleSmall
             )
@@ -112,12 +111,7 @@ fun MessageCard(msg: Message,
 
 @Composable
 fun Conversation(messages: List<Message>,
-                 navController: NavHostController,
-                 userDatabase: UserDatabase) {
-
-    val userDao = userDatabase.userDao()
-    val username by userDao.getUserFlow().collectAsState(initial = null)
-
+                 navController: NavHostController) {
     Column {
         Row (
             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary),
@@ -131,7 +125,7 @@ fun Conversation(messages: List<Message>,
         Divider(color = MaterialTheme.colorScheme.secondary)
         LazyColumn {
             items(messages) { message ->
-                MessageCard(message, navController, username?.username)
+                MessageCard(message, navController)
             }
         }
     }

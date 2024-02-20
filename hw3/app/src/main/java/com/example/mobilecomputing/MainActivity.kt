@@ -18,28 +18,18 @@ import com.example.mobilecomputing.ui.theme.MobileComputingTheme
 
 
 class MainActivity : ComponentActivity() {
-
-    lateinit var userDatabase: UserDatabase
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        userDatabase = Room.databaseBuilder(
-            applicationContext,
-            UserDatabase::class.java,
-            "user_database"
-        ).build()
-
         setContent {
             MobileComputingTheme {
-                NavHost(userDatabase = userDatabase)
+                NavHost()
             }
         }
     }
 }
 
 @Composable
-fun NavHost(userDatabase: UserDatabase) {
+fun NavHost() {
 
     val navController = rememberNavController()
 
@@ -48,10 +38,10 @@ fun NavHost(userDatabase: UserDatabase) {
         startDestination = "messages"
     ) {
         composable("messages") {
-            Conversation(messages = SampleData.conversationSample, navController = navController, userDatabase = userDatabase)
+            Conversation(messages = SampleData.conversationSample, navController = navController)
         }
         composable("settings") {
-            SettingsScreen(navController = navController, userDatabase = userDatabase)
+            SettingsScreen(navController = navController)
         }
     }
 }

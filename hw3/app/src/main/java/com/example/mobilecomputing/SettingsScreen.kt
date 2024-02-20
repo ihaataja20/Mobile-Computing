@@ -36,16 +36,10 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 
 @Composable
-fun SettingsScreen(navController: NavHostController, userDatabase: UserDatabase) {
+fun SettingsScreen(navController: NavHostController) {
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    var username by remember { mutableStateOf<String?>(null) }
-
-    val userDao = userDatabase.userDao()
-
-    userDao.getUserFlow().collectAsState(initial = User(0, "")).value?.let {
-        username = it.username
-    }
+    var username by remember { mutableStateOf<String>("") }
 
     val photoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -81,8 +75,8 @@ fun SettingsScreen(navController: NavHostController, userDatabase: UserDatabase)
 
             // OutlinedTextField for username
             OutlinedTextField(
-                value = username ?: "",
-                onValueChange = { newValue -> username = newValue },
+                value = username,
+                onValueChange = { username = it},
                 label = { Text("Username") },
                 modifier = Modifier
                     .fillMaxWidth()
